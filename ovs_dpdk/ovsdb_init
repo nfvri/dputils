@@ -1,0 +1,5 @@
+#!/bin/bash
+
+source vars.sh
+
+$OVS_DIR/utilities/ovs-vsctl --db=unix:$OVS_DB_SOCK --no-wait init 

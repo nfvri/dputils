@@ -1,0 +1,11 @@
+#!/bin/bash
+
+source vars.sh
+
+wget -nc http://openvswitch.org/releases/openvswitch-${OVS_VERSION}.tar.gz -P $BASE_DIR/tarballs
+tar -zxvf $BASE_DIR/tarballs/openvswitch-${OVS_VERSION}.tar.gz --directory $BASE_DIR
+pushd $OVS_DIR
+./boot.sh
+./configure --with-dpdk=$DPDK_BUILD
+make
+popd

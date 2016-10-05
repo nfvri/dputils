@@ -1,0 +1,4 @@
+#!/bin/bash
+
+source vars.sh
+rm -rf $OVS_DIR

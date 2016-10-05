@@ -1,0 +1,14 @@
+#!/bin/bash
+
+source vars.sh
+
+systemctl stop openvswitch.service
+
+OVS_DB_CONF=$OVS_RUN_DIR/etc/openvswitch/conf.db
+OVS_DB_SCHEMA=$OVS_RUN_DIR/share/openvswitch/vswitch.ovsschema 
+
+rm -f /usr/local/etc/openvswitch/conf.db
+rm -rf $OVS_DB_CONF 
+mkdir -p $OVS_RUN_DIR/etc/openvswitch
+mkdir -p $OVS_RUN_DIR/var/run/openvswitch
+$OVS_DIR/ovsdb/ovsdb-tool create $OVS_DB_CONF $OVS_DB_SCHEMA
