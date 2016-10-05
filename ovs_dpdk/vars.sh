@@ -7,4 +7,5 @@ DPDK_BUILD=$DPDK_DIR/$DPDK_TARGET
 OVS_VERSION=2.6.0
 OVS_DIR=$BASE_DIR/openvswitch-${OVS_VERSION}
 OVS_RUNDIR=$BASE_DIR/openvswitch-${OVS_VERSION}-runtime
-OVS_DB_SOCK=$OVS_RUN_DIR/var/run/openvswitch/db.sock 
+OVS_DB_SOCK=$OVS_RUN_DIR/var/run/openvswitch/db.sock
+SLEEP_SECS=1

@@ -1,0 +1,5 @@
+#!/bin/bash
+
+source vars.sh
+$DPDK_DIR/tools/dpdk-devbind.py --unbind 0000:01:00.0 0000:01:00.1
+$DPDK_DIR/tools/dpdk-devbind.py --bind=ixgbe  0000:01:00.0 0000:01:00.1
