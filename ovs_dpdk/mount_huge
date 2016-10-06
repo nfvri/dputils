@@ -1,2 +1,2 @@
 #!/bin/bash
-mount -t hugetlbfs none /dev/hugepages
+sudo mount -t hugetlbfs none /dev/hugepages

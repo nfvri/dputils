@@ -1,4 +1,0 @@
-#!/bin/bash
-source vars.sh
-modprobe uio 
-insmod $DPDK_DIR/x86_64-native-linuxapp-gcc/kmod/igb_uio.ko

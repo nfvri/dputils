@@ -1,33 +1,68 @@
 #!/bin/bash
 
-# $1: sockets memory to pre-allocate for hugepages
-#     	e.g. 4096,0, to allocate 4G from 1st socket, 0 from the 2nd
-# $2: CPU cores on which dpdk lcore threads should be spawned
-#     	expects hex, e.g. 55, to specify CPUS 0,2,4,6
-# $3: CPU cores on which PMD threads should be spawned, 
-#		expects hex, e.g. 55
+# -m | --dpdk-socket-mem: 
+#	sockets memory to pre-allocate for hugepages 
+#	e.g. 4096,0, to allocate 4G from 1st socket, 0 from the 2nd
+# -c | --dpdk-lcore-mask:
+# 	CPU cores on which dpdk lcore threads should be spawned
+#  	expects hex, e.g. 55, to specify CPUS 0,2,4,6
+# -p | --dpdk-pmd-mask:
+# 	CPU cores on which PMD threads should be spawned, 
+#	expects hex, e.g. 55
 
 source vars.sh
 
+while [[ $# -gt 1 ]]
+do
+key="$1"
+case $key in
+    -m|--dpdk-socket-mem)
+    DPDK_SOCKET_MEM="$2"
+    shift 
+    ;;
+    -c|--dpdk-lcore-mask)
+    DPDK_LCORE_MASK="$2"
+    shift 
+    ;;
+    -p|--dpdk-pmd-mask)
+    DPDK_PMD_MASK="$2"
+    shift 
+    ;;
+    *)
+            # unknown option
+    ;;
+esac
+shift 
+done
+
 # specify OVS to initialize and support DPDK ports 
-$OVS_DIR/utilities/ovs-vsctl --db=unix:$OVS_DB_SOCK --no-wait \
+$OVS_DIR/utilities/ovs-vsctl --db=unix:$OVSDB_SOCK --no-wait \
 	set Open_vSwitch . other_config:dpdk-init=true 
 
 # set memory
-$OVS_DIR/utilities/ovs-vsctl --db=unix:$OVS_DB_SOCK --no-wait \
-	set Open_vSwitch . other_config:dpdk-socket-mem=$1
+if [[ -v $DPDK_SOCKET_MEM ]]
+then
+$OVS_DIR/utilities/ovs-vsctl --db=unix:$OVSDB_SOCK --no-wait \
+	set Open_vSwitch . other_config:dpdk-socket-mem=$DPDK_SOCKET_MEM
+fi
 
 # set DPDK lcore threads CPU mask
-$OVS_DIR/utilities/ovs-vsctl --db=unix:$OVS_DB_SOCK --no-wait \
-	set Open_vSwitch . other_config:dpdk-lcore-mask="0x$2"
+if [[ -v $DPDK_LCORE_MASK ]]
+then
+$OVS_DIR/utilities/ovs-vsctl --db=unix:$OVSDB_SOCK --no-wait \
+	set Open_vSwitch . other_config:dpdk-lcore-mask="0x$DPDK_LCORE_MASK"
+fi
 
 # set PMD threads CPU mask
-$OVS_DIR/utilities/ovs-vsctl --db=unix:$OVS_DB_SOCK --no-wait \
-	set Open_vSwitch . other_config:pmd-cpu-mask=$3
+if [[ -v $DPDK_PMD_MASK ]]
+then
+$OVS_DIR/utilities/ovs-vsctl --db=unix:$OVSDB_SOCK --no-wait \
+	set Open_vSwitch . other_config:pmd-cpu-mask=$DPDK_PMD_MASK
+fi
 
 # set path to vhost_user unix socket
-$OVS_DIR/utilities/ovs-vsctl --db=unix:$OVS_DB_SOCK --no-wait \
-	set Open_vSwitch . other_config:vhost-sock-dir="$OVS_DB_SOCK"
+$OVS_DIR/utilities/ovs-vsctl --db=unix:$OVSDB_SOCK --no-wait \
+	set Open_vSwitch . other_config:vhost-sock-dir="$OVSDB_SOCK"
 
 # start vswitchd
-ovs-vswitchd unix:$OVS_DB_SOCK --pidfile --detach
+ovs-vswitchd unix:$OVSDB_SOCK --pidfile --detach

@@ -6,19 +6,19 @@
 source vars.sh
 
 # Create an interface mapped to the first dpdk bound interface 
-$OVS_DIR/utilities/ovs-vsctl --no-wait --db=unix:$OVS_DB_SOCK \
+$OVS_DIR/utilities/ovs-vsctl --no-wait --db=unix:$OVSDB_SOCK \
 	add-port $1 $2 -- set Interface $2 type=dpdk 
 sleep $SLEEP_SECS 
 
 # Configure RX queues
 if [ "$#" = 3 ]; then
-	$OVS_DIR/utilities/ovs-vsctl --no-wait --db=unix:$OVS_DB_SOCK \
+	$OVS_DIR/utilities/ovs-vsctl --no-wait --db=unix:$OVSDB_SOCK \
 		set Interface $2 options:n_rxq=$3 
 	sleep $SLEEP_SECS 
 fi
  
-#$OVS_DIR/utilities/ovs-vsctl --no-wait --db=unix:$OVS_DB_SOCK \
+#$OVS_DIR/utilities/ovs-vsctl --no-wait --db=unix:$OVSDB_SOCK \
 #	set Interface $2 options:n_rxq=$3 \
 #	other_config:pmd-rxq-affinity="0:0,1:2" 
-#$OVS_DIR/utilities/ovs-vsctl --no-wait --db=unix:$OVS_DB_SOCK \
+#$OVS_DIR/utilities/ovs-vsctl --no-wait --db=unix:$OVSDB_SOCK \
 #	set Interface $2 options:n_txq=$3 

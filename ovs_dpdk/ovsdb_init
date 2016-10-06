@@ -2,4 +2,4 @@
 
 source vars.sh
 
-$OVS_DIR/utilities/ovs-vsctl --db=unix:$OVS_DB_SOCK --no-wait init 
+$OVS_DIR/utilities/ovs-vsctl --db=unix:$OVSDB_SOCK --no-wait init 

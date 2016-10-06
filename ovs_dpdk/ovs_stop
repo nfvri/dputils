@@ -1,0 +1,6 @@
+#!/bin/bash
+
+source vars.sh
+
+# kill ovs
+rm -rf $OVS_RUN_DIR/*

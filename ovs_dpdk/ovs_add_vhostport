@@ -5,6 +5,6 @@
 source vars.sh
 
 # Create an interface mapped to the first dpdk bound interface 
-$OVS_DIR/utilities/ovs-vsctl --no-wait --db=unix:$OVS_DB_SOCK \
+$OVS_DIR/utilities/ovs-vsctl --no-wait --db=unix:$OVSDB_SOCK \
 	add-port $1 $2 -- set Interface $2 type=dpdkvhostuser
 sleep $SLEEP_SECS 

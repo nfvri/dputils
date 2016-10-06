@@ -4,4 +4,4 @@
 
 source vars.sh
 
-$OVS_DIR/utilities/ovs-vsctl --no-wait --db=unix:$OVS_DB_SOCK del-port $1 $2
+$OVS_DIR/utilities/ovs-vsctl --no-wait --db=unix:$OVSDB_SOCK del-port $1 $2

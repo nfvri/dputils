@@ -3,7 +3,7 @@
 
 source vars.sh
 
-$OVS_DIR/utilities/ovs-vsctl --db=unix:$OVS_DB_SOCK --no-wait \
+$OVS_DIR/utilities/ovs-vsctl --db=unix:$OVSDB_SOCK --no-wait \
 	add-br $1 -- set bridge $1 datapath_type=netdev
 
 sleep $SLEEP_SECS
