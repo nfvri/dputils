@@ -1,7 +1,0 @@
-#!/bin/bash
-# $1: bridge to delete port from
-# $2: port name (e.g. dpdk0)
-
-source vars.sh
-
-$OVS_DIR/utilities/ovs-vsctl --no-wait --db=unix:$OVSDB_SOCK del-port $1 $2

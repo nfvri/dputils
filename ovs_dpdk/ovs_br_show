@@ -1,0 +1,27 @@
+#!/bin/bash
+if [[ $1 == "-h" ]]
+then
+echo "Show bridge details"
+echo ""
+echo "-b | --bridge: bridge name"
+exit 0
+fi
+
+source vars.sh
+
+while [[ $# -gt 1 ]]
+do
+key="$1"
+case $key in
+-b|--bridge)
+    BRIDGE="$2"
+    shift 
+    ;;
+
+*)
+    ;;
+esac
+shift 
+done
+
+sudo $OVS_DIR/utilities/ovs-ofctl show $BRIDGE

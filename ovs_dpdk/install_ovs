@@ -1,5 +1,5 @@
 #!/bin/bash
-
+set -x
 source vars.sh
 
 wget -nc http://openvswitch.org/releases/openvswitch-${OVS_VERSION}.tar.gz -P $BASE_DIR/tarballs

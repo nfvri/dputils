@@ -1,6 +1,0 @@
-#!/bin/bash
-# $1: bridge to remove
-
-source vars.sh
-
-$OVS_DIR/utilities/ovs-vsctl --no-wait --db=unix:$OVSDB_SOCK del-br $1

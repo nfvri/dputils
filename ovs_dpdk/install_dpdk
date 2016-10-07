@@ -1,5 +1,5 @@
 #!/bin/bash
-
+set -x
 source vars.sh
 
 mkdir -p $BASE_DIR/tarballs

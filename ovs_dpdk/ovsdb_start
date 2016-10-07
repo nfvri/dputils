@@ -1,5 +1,5 @@
 #!/bin/bash
-
+set -x
 source vars.sh
 # start ovsdb server
 $OVS_DIR/ovsdb/ovsdb-server --remote=punix:$OVSDB_SOCK \

@@ -1,0 +1,37 @@
+#!/bin/bash
+
+if [[ $1 == "-h" ]]
+then
+echo "Add a vhost-user port to OVS"
+echo ""
+echo "-b | --bridge:    bridge to add port to"
+echo "-p | --port:      port name (vhost-user1, vhost-user2, ...)"
+exit 0
+fi
+
+set -x
+source vars.sh
+
+while [[ $# -gt 1 ]]
+do
+key="$1"
+case $key in
+-b|--bridge)
+    BRIDGE="$2"
+    shift 
+    ;;
+
+-p|--port)
+    PORT="$2"
+    shift 
+    ;;
+
+*)
+    ;;
+esac
+shift 
+done
+
+sudo $OVS_DIR/utilities/ovs-vsctl --no-wait --db=unix:$OVSDB_SOCK \
+	add-port $BRIDGE $PORT -- set Interface $PORT type=dpdkvhostuser
+sleep $SLEEP_SECS 

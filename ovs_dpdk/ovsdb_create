@@ -1,7 +1,6 @@
 #!/bin/bash
-
+set -x
 source vars.sh
-
 
 rm -rf $OVSDB_CONF 
 mkdir -p $OVS_ETC_DIR

@@ -1,4 +1,5 @@
 #!/bin/bash
-
+set -x
 source vars.sh
+
 rm -rf $OVS_DIR

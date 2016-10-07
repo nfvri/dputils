@@ -1,2 +1,3 @@
 #!/bin/bash
+set -x
 sudo mount -t hugetlbfs none /dev/hugepages
