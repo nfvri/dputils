@@ -3,6 +3,4 @@
 source vars.sh
 
 pkill -KILL ovsdb-server
-rm -f $OVSDB_RUN_DIR/var/run/openvswitch/* \
-      $OVSDB_RUN_DIR/etc/openvswitch/* \
-      $OVSDB_RUN_DIR/var/log/openvswitch/* 
+rm -f $OVS_RUN_DIR/* $OVS_ETC_DIR/* $OVS_LOG_DIR/*

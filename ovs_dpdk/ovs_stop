@@ -2,5 +2,5 @@
 
 source vars.sh
 
-# kill ovs
-rm -rf $OVS_RUN_DIR/*
+sudo pkill -KILL ovs-vswitchd
+sudo rm -rf $OVS_RUN_DIR/*

@@ -4,6 +4,6 @@ source vars.sh
 
 
 rm -rf $OVSDB_CONF 
-mkdir -p $OVSDB_RUN_DIR/etc/openvswitch
-mkdir -p $OVSDB_RUN_DIR/var/run/openvswitch
+mkdir -p $OVS_ETC_DIR
+mkdir -p $OVS_RUN_DIR
 $OVS_DIR/ovsdb/ovsdb-tool create $OVSDB_CONF $OVSDB_SCHEMA

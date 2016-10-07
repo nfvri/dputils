@@ -15,5 +15,4 @@
    - /usr/local/var/run/openvswitch/
    - /usr/local/var/log/openvswitch/
    - /usr/local/etc/openvswitch/
-- read-write access for OVS:
-   - /var/run/openvswitch/
+- read-write access to /var/run in order to create /var/run/openvswitch
