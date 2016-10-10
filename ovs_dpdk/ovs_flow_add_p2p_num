@@ -38,9 +38,6 @@ esac
 shift 
 done
 
-declare -A pmap
-
-
 
 sudo $OVS_DIR/utilities/ovs-ofctl add-flow $BRIDGE in_port=$IN_PORT,action=output:$OUT_PORTS
 sleep $SLEEP_SECS 
