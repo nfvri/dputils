@@ -1,0 +1,54 @@
+#! /usr/bin/env python
+
+import argparse
+import re
+import subprocess
+import sys
+
+if __name__ == '__main__':
+    """
+       taskset 0x20 qemu-system-x86_64 
+       -name $VM_NAME 
+       -cpu host 
+       -enable-kvm 
+       -m $GUEST_MEM  // e.g. 3072M
+       -object memory-backend-file,id=mem,size=$GUEST_MEM,mem-path=/dev/hugepages,share=on
+       -numa node,memdev=mem 
+       -mem-prealloc 
+       -smp sockets=1,cores=2 
+       -drive file=$QCOW2_IMAGE 
+    
+    -chardev socket,id=char2,path=/usr/local/var/run/openvswitch/vhost-user-2
+    -netdev type=vhost-user,id=mynet2,chardev=char2,vhostforce,queues=$q
+    -device virtio-net-pci,mac=00:00:00:00:00:02,netdev=mynet2,mq=on,vectors=$v
+
+    $v = $q*2 + 2
+
+       -chardev socket,id=char0,path=$VHOST_SOCK_DIR/dpdkvhostuser0 
+       -netdev type=vhost-user,id=mynet1,chardev=char0,vhostforce 
+       -device virtio-net-pci,mac=00:00:00:00:00:01,netdev=mynet1,mrg_rxbuf=off
+
+       -chardev socket,id=char1,path=$VHOST_SOCK_DIR/dpdkvhostuser1 
+       -netdev type=vhost-user,id=mynet2,chardev=char1,vhostforce 
+       -device virtio-net-pci,mac=00:00:00:00:00:02,netdev=mynet2,mrg_rxbuf=off
+      
+      --nographic 
+       -snapshot
+
+    """
+	parser = argparse.ArgumentParser(description='Launch a QEMU instance')
+
+	parser.add_argument('--cpu-list', 
+			    dest='cpu_list',
+			    action='store',
+			    help='CPU list to bind all QEMU threads')
+	parser.add_argument('--vm-name', 
+			    dest='vm_name',
+			    action='store',
+			    help='VM name')
+
+
+
+	args = parser.parse_args()
+
+
