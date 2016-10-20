@@ -1,0 +1,9 @@
+#! /usr/bin/env python3
+
+from vswitch.vs import OvsDpdk
+import logging
+
+if __name__ == '__main__':
+    logging.basicConfig(level=logging.DEBUG, format="----[%(asctime)s ]: %(message)s")
+    ovdk = OvsDpdk()
+    ovdk.db_start()

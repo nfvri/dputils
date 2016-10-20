@@ -1,0 +1,10 @@
+#! /usr/bin/env python3
+
+from vswitch.dpdk import Dpdk
+import logging
+
+if __name__ == '__main__':
+    logging.basicConfig(level=logging.DEBUG, format="----[%(asctime)s ]: %(message)s")
+
+    dpdk = Dpdk()
+    dpdk.mount_huge()

@@ -1,0 +1,15 @@
+#! /usr/bin/env python3
+
+from vswitch.vs import OvsDpdk
+import logging
+import argparse
+
+
+if __name__ == '__main__':
+    logging.basicConfig(level=logging.DEBUG, format="----[%(asctime)s ]: %(message)s")
+    parser = argparse.ArgumentParser(description='Show OVS-DPDK bridge')
+    parser.add_argument('--bridge', dest='bridge', action='store', help='Bridge name')
+    args = parser.parse_args()
+
+    ovdk = OvsDpdk()
+    ovdk.br_show(args.bridge)

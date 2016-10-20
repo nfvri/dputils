@@ -1,0 +1,21 @@
+#! /usr/bin/env python3
+
+from vswitch.dpdk import Dpdk
+import argparse
+import logging
+
+if __name__ == '__main__':
+    logging.basicConfig(level=logging.DEBUG, format="----[%(asctime)s ]: %(message)s")
+    parser = argparse.ArgumentParser(description='Unbind interfaces from igb_uio driver')
+    parser.add_argument('--interfaces',
+                        dest='interfaces',
+                        action='store',
+                        help='Comma separated list of interface PCI ids (e.g. 0000:01:00.0,0000:01:00.1)')
+    parser.add_argument('--drv',
+                        dest='drv',
+                        action='store',
+                        help='Driver to bind interfaces back to, e.g. ixgbe, e1000, etc.')
+    args = parser.parse_args()
+
+    dpdk = Dpdk()
+    dpdk.unbind_igb_uio(args.interfaces.split(','), args.drv)

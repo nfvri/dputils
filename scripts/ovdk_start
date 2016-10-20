@@ -1,0 +1,22 @@
+#! /usr/bin/env python3
+
+from vswitch.vs import OvsDpdk
+import logging
+import argparse
+
+if __name__ == '__main__':
+    logging.basicConfig(level=logging.DEBUG, format="----[%(asctime)s ]: %(message)s")
+    parser = argparse.ArgumentParser(description='Start OVS-DPDK switch')
+    parser.add_argument('--dpdk-socket-mem', dest='dpdk_socket_mem', action='store',
+                        help='Comma-separated list of sockets memory to pre-allocate for hugepages, e.g. 4096,0 to '
+                             'allocate 4G from 1st socket, 0 from the 2nd')
+    parser.add_argument('--dpdk-lcore-mask', dest='dpdk_lcore_mask', action='store',
+                        help='CPU cores on which DPDK lcore threads should be spawned, expects hex, e.g. 55 , to '
+                             'specify CPUS 0,2,4,6')
+    parser.add_argument('--dpdk-pmd-mask', dest='dpdk_pmd_mask', action='store',
+                        help='CPU cores on which PMD threads should be spawned, expects hex, e.g. 55 , to '
+                             'specify CPUS 0,2,4,6')
+    args = parser.parse_args()
+
+    ovdk = OvsDpdk()
+    ovdk.start(args.dpdk_socket_mem, args.dpdk_lcore_mask, args.dpdk_pmd_mask)
