@@ -28,8 +28,8 @@ class QemuVhostuser(object):
         Compute a unique prefix for the first 3 bytes of all MAC addresses, 
         based on the guest name
         """
-        hash = hashlib.md5(self._name.encode('utf-8')).hexdigest()
-        return hash[0:2] + ':' + hash[2:4] + ':' + hash[4:6] + ':00:00:'
+        sig = hashlib.md5(self._name.encode('utf-8')).hexdigest()
+        return sig[0:2] + ':' + sig[2:4] + ':' + sig[4:6] + ':00:00:'
 
     def _init_pid(self):
         with open(self._pidfile, 'r') as f:
@@ -71,7 +71,7 @@ class QemuVhostuser(object):
             cmd = cmd + netcmd
             ind += 1
 
-        #TODO: execute cmd
+        # TODO: execute cmd
         print(cmd)
         self._init_pid()
 

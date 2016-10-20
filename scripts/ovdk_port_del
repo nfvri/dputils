@@ -1,6 +1,6 @@
 #! /usr/bin/env python3
 
-from vswitch.vs import OvsDpdk
+from vswitch.ovdk import OvsDpdk
 import logging
 import argparse
 
