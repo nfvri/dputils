@@ -1,0 +1,16 @@
+#! /usr/bin/env python3
+
+from vswitch.dpdk import Dpdk
+import argparse
+
+if __name__ == '__main__':
+    parser = argparse.ArgumentParser(description='Bind interfaces to igb_uio driver')
+
+    parser.add_argument('--interfaces',
+                        dest='interfaces',
+                        action='store',
+                        help='Comma separated list of interface PCI ids (e.g. 0000:01:00.0,0000:01:00.1)')
+    args = parser.parse_args()
+
+    dpdk = Dpdk()
+    dpdk.bind_igb_uio(args.interfaces.split(','))

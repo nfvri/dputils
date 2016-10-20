@@ -1,4 +1,0 @@
-#!/bin/bash
-set -x
-source vars.sh
-sudo $DPDK_DIR/tools/dpdk-devbind.py --bind=igb_uio  0000:01:00.0 0000:01:00.1

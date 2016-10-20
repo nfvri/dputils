@@ -1,0 +1,7 @@
+#! /usr/bin/env python3
+
+from vswitch.vs import OvsDpdk
+
+if __name__ == '__main__':
+    ovs = OvsDpdk()
+    ovs.uninstall()

@@ -1,0 +1,31 @@
+#! /usr/bin/env python3
+
+import argparse
+import qemu
+
+if __name__ == '__main__':
+    parser = argparse.ArgumentParser(description='Launch a QEMU instance')
+
+    parser.add_argument('--cpu-list', dest='cpu_list', action='store',
+                        help='CPU list to bind all QEMU threads (e.g. 0,1,2)')
+    parser.add_argument('--name', dest='name', action='store', help='VM name')
+    parser.add_argument('--enable-kvm', dest='enable_kvm', action='store_true',
+			            help='Use KVM acceleration')
+    parser.add_argument('--guest-mem', dest='guest_mem', action='store',
+                        help='Guest memory (e.g. 3072M)')
+    parser.add_argument('--nsockets', dest='nsockets', action='store',
+                        help='Number of CPU sockets to simulate')
+    parser.add_argument('--qcow2-image', dest='qcow2_image', action='store',
+                        help='Path of QCOW2 image')
+    parser.add_argument('--cores-per-sock', dest='cores_per_sock',
+                         action='store', help='Number of cores per socket')
+    parser.add_argument('--vhostuser-ports-socks', dest='vhostuser_ports_socks',
+                        action='store', help='Comma separated list of vhostuser ports socket paths')
+    parser.add_argument('--vhostuser-ports-queues', dest='vhostuser_ports_queues',
+                        action='store', help='Comma separated list of vhostuser ports queues')
+    args = parser.parse_args()
+
+    guest = qemu.QemuVhostuser(args.cpu_list, args.name, args.enable_kvm, args.guest_mem,
+                               args.nsockets, args.cores_per_sock, args.qcow2_image, 
+                               args.vhostuser_ports_socks, args.vhostuser_ports_queues)
+    guest.start()

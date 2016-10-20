@@ -1,0 +1,7 @@
+#! /usr/bin/env python3
+
+from vswitch.dpdk import Dpdk
+
+if __name__ == '__main__':
+    dpdk = Dpdk()
+    dpdk.uninstall()
