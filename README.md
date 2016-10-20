@@ -20,5 +20,3 @@
 - read-write access to /var/run in order to create /var/run/openvswitch
 
 ## TODO
-- Pythonize: ovs_start, ovs_dpdkport_add
-- Make bind_ifaces/unbind_ifaces accept variadic args
