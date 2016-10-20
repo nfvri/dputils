@@ -17,8 +17,7 @@ def run(cmd, do_check=True, do_shell=False, get_out=False):
         cmd_str = ' '.join(cmd)
     elif isinstance(cmd, str):
         cmd_str = cmd
-
-    logging.debug('-----> Running command: ' + cmd_str)
+    logging.debug(cmd_str)
 
     if get_out:
         return subprocess.run(cmd, check=do_check, shell=do_shell, stdout=subprocess.PIPE).stdout

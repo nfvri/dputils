@@ -1,5 +1,0 @@
-#!/bin/bash
-set -x
-source vars.sh
-
-rm -rf $DPDK_DIR

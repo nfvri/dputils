@@ -21,7 +21,7 @@ class OvsDpdk(object):
         run('cd ' + conf.OVS_DIR +
                         ' && ./boot.sh ' +
                         ' && ./configure --with-dpdk=' + conf.DPDK_BUILD +
-                        ' make', do_shell=True)
+                        ' && make', do_shell=True)
 
     def uninstall(self):
         run(['rm', '-rf', conf.OVS_DIR])

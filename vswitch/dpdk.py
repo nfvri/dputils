@@ -14,10 +14,10 @@ class Dpdk(object):
     def uninstall(self):
         run(['rm', '-rf', conf.DPDK_DIR])
 
-    def load_modules(self):
+    def unload_modules(self):
         run(['sudo', 'rmmod', 'igb_uio'])
 
-    def unload_modules(self):
+    def load_modules(self):
         run(['sudo', 'modprobe', 'uio'])
         run(['sudo', 'insmod', conf.DPDK_DIR + '/x86_64-native-linuxapp-gcc/kmod/igb_uio.ko'])
 
@@ -36,12 +36,13 @@ class Dpdk(object):
         """
         run(['sudo', conf.DPDK_DIR + '/tools/dpdk-devbind.py', '--bind=igb_uio'] + ifaces)
 
-    def unbind_igb_uio(self, ifaces):
+    def unbind_to(self, ifaces, drv):
         """
-        Unbind interfaces from the igb_uio driver back to ixgbe
+        Unbind interfaces from the igb_uio driver back to ixgbe, e1000, etc.
 
         Args:
             ifaces: list of interfaces to unbind, e.g. ['0000:01:00.0', '0000:01:00.1']
+            drv: driver to bind interfaces back to, e.g. ixgbe, e1000, etc.
         """
         run(['sudo', conf.DPDK_DIR + '/tools/dpdk-devbind.py', '--unbind'] + ifaces)
-        run(['sudo', conf.DPDK_DIR + '/tools/dpdk-devbind.py', '--bind=ixgbe'] + ifaces)
+        run(['sudo', conf.DPDK_DIR + '/tools/dpdk-devbind.py', '--bind=' + drv] + ifaces)

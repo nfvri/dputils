@@ -1,9 +1,8 @@
 #! /usr/bin/env python3
-
-from vswitch.dpdk import Dpdk
+from vswitch.vs import OvsDpdk
 import logging
 
 if __name__ == '__main__':
     logging.basicConfig(level=logging.DEBUG, format="----[%(asctime)s ]: %(message)s")
-    dpdk = Dpdk()
-    dpdk.install()
+    ovdk = OvsDpdk()
+    ovdk.uninstall()

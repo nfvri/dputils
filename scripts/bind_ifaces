@@ -2,10 +2,11 @@
 
 from vswitch.dpdk import Dpdk
 import argparse
+import logging
 
 if __name__ == '__main__':
+    logging.basicConfig(level=logging.DEBUG, format="----[%(asctime)s ]: %(message)s")
     parser = argparse.ArgumentParser(description='Bind interfaces to igb_uio driver')
-
     parser.add_argument('--interfaces',
                         dest='interfaces',
                         action='store',
