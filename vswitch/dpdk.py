@@ -8,8 +8,7 @@ class Dpdk(object):
         run(
             ['wget', '-nc', 'http://dpdk.org/browse/dpdk/snapshot/dpdk-16.07.zip', '-P', conf.BASE_DIR + '/tarballs'])
         run(['unzip', '-n', conf.BASE_DIR + '/tarballs/dpdk-16.07.zip', '-d', conf.BASE_DIR])
-        run('cd ' + conf.DPDK_DIR + ' && make install T=' + conf.DPDK_TARGET + ' DESTDIR=install',
-                        do_shell=True)
+        run('cd ' + conf.DPDK_DIR + ' && make install T=' + conf.DPDK_TARGET + ' DESTDIR=install', do_shell=True)
 
     def uninstall(self):
         run(['rm', '-rf', conf.DPDK_DIR])

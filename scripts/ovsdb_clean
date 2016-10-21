@@ -1,6 +1,0 @@
-#!/bin/bash
-set -x
-source vars.sh
-
-pkill -KILL ovsdb-server
-rm -f $OVS_RUN_DIR/* $OVS_ETC_DIR/* $OVS_LOG_DIR/*

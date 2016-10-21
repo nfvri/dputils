@@ -10,6 +10,7 @@ def run(cmd, do_check=True, do_shell=False, get_out=False):
         do_shell: interpret command as shell command
         get_out: return output
     """
+    cmd_str = ''
     if isinstance(cmd, list):
         cmd_str = ' '.join(cmd)
     elif isinstance(cmd, str):

@@ -19,9 +19,9 @@ class OvsDpdk(object):
         run(['wget', '-nc', 'http://openvswitch.org/releases/' + tarball, '-P', conf.BASE_DIR + '/tarballs'])
         run(['tar', '-zxvf', conf.BASE_DIR + '/tarballs/' + tarball, '--directory', conf.BASE_DIR])
         run('cd ' + conf.OVS_DIR +
-                        ' && ./boot.sh ' +
-                        ' && ./configure --with-dpdk=' + conf.DPDK_BUILD +
-                        ' && make', do_shell=True)
+            ' && ./boot.sh ' +
+            ' && ./configure --with-dpdk=' + conf.DPDK_BUILD +
+            ' && make', do_shell=True)
 
     def uninstall(self):
         run(['rm', '-rf', conf.OVS_DIR])
@@ -35,17 +35,17 @@ class OvsDpdk(object):
     def db_clean(self):
         run(['sudo', 'pkill', '-KILL', 'ovsdb-server'], do_check=False)
         run('sudo rm -rf ' + conf.OVS_RUN_DIR + '/* ' +
-                        conf.OVS_ETC_DIR + '/* ' +
-                        conf.OVS_LOG_DIR + '/*',
-                        do_shell=True)
+            conf.OVS_ETC_DIR + '/* ' +
+            conf.OVS_LOG_DIR + '/*',
+            do_shell=True)
 
     def db_init(self):
         run(self._vsctl_cmd + ['init'])
 
     def db_start(self):
         run(['sudo', conf.OVS_DIR + '/ovsdb/ovsdb-server', '--remote=punix:' + conf.OVSDB_SOCK,
-                         '--remote=db:Open_vSwitch,Open_vSwitch,manager_options', '--pidfile', '--detach',
-                         conf.OVSDB_CONF])
+             '--remote=db:Open_vSwitch,Open_vSwitch,manager_options', '--pidfile', '--detach',
+             conf.OVSDB_CONF])
 
     def start(self, dpdk_socket_mem=None, dpdk_lcore_mask=None, dpdk_pmd_mask=None):
         run(['sudo', 'mkdir', '-p', conf.OVS_RUN_DIR + '/' + conf.OVS_VHOST_SUBDIR])
@@ -55,19 +55,19 @@ class OvsDpdk(object):
         run(self._vsctl_cmd + ['set', 'Open_vSwitch', '.', 'other_config:dpdk-hugepage-dir=/dev/hugepages'])
         # set path to vhost_user unix socket
         run(self._vsctl_cmd + ['set', 'Open_vSwitch', '.',
-                                           'other_config:vhost-sock-dir="' + conf.OVS_VHOST_SUBDIR + '"'])
+                               'other_config:vhost-sock-dir="' + conf.OVS_VHOST_SUBDIR + '"'])
         # set memory
         if dpdk_socket_mem:
             run(self._vsctl_cmd + ['set', 'Open_vSwitch', '.',
-                                               'other_config:dpdk-socket-mem=' + dpdk_socket_mem])
+                                   'other_config:dpdk-socket-mem=' + dpdk_socket_mem])
         # set DPDK lcore threads CPU mask
         if dpdk_lcore_mask:
             run(self._vsctl_cmd + ['set', 'Open_vSwitch', '.',
-                                               'other_config:dpdk-lcore-mask="0x' + dpdk_lcore_mask + '"'])
+                                   'other_config:dpdk-lcore-mask="0x' + dpdk_lcore_mask + '"'])
         # set PMD threads CPU mask
         if dpdk_pmd_mask:
             run(self._vsctl_cmd + ['set', 'Open_vSwitch', '.',
-                                               'other_config:pmd-cpu-mask=' + dpdk_pmd_mask])
+                                   'other_config:pmd-cpu-mask=' + dpdk_pmd_mask])
         run(
             ['sudo', conf.OVS_DIR + '/vswitchd/ovs-vswitchd', 'unix:' + conf.OVSDB_SOCK, '--pidfile', '--detach'])
 
@@ -101,7 +101,7 @@ class OvsDpdk(object):
         if rx_aff:
             run(
                 self._vsctl_cmd + ['set', 'Interface', port, 'other_config:pmd-rxq-affinity="' + str(rx_aff) + '"'])
-    
+
         if tx_queues:
             run(self._vsctl_cmd + ['set', 'Interface', port, 'options:n_txq=' + str(tx_queues)])
         if tx_size:

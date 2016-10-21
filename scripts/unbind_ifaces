@@ -20,4 +20,4 @@ if __name__ == '__main__':
     args = parser.parse_args()
 
     dpdk = Dpdk()
-    dpdk.unbind_igb_uio(args.interfaces.split(','), args.drv)
+    dpdk.unbind_to(args.interfaces.split(','), args.drv)

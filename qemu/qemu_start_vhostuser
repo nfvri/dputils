@@ -1,7 +1,7 @@
 #! /usr/bin/env python3
 
 import argparse
-import qemu
+from qemu.qemu import QemuVhostuser
 import logging
 
 if __name__ == '__main__':
@@ -26,7 +26,6 @@ if __name__ == '__main__':
                         action='store', help='Comma separated list of vhostuser ports queues')
     args = parser.parse_args()
 
-    guest = qemu.QemuVhostuser(args.cpu_list, args.name, args.enable_kvm, args.guest_mem,
-                               args.nsockets, args.cores_per_sock, args.qcow2_image,
-                               args.vhostuser_ports_socks, args.vhostuser_ports_queues)
+    guest = QemuVhostuser(args.cpu_list, args.name, args.enable_kvm, args.guest_mem, args.nsockets, args.cores_per_sock,
+                          args.qcow2_image, args.vhostuser_ports_socks, args.vhostuser_ports_queues)
     guest.start()
