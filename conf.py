@@ -21,7 +21,7 @@ OVSDB_LOG_FILE = OVS_LOG_DIR + '/ovsdb-server.log'
 OVSDB_PID_FILE = OVS_RUN_DIR + '/ovsdb-server.pid'
 OVS_VHOST_SUBDIR = 'vhost-sock'
 
-SLEEP_SECS = 1
+SLEEP_SECS = '1'
 
 QEMU_VERSION = '2.7.0'
 QEMU_DIR = BASE_DIR + '/qemu-' + QEMU_VERSION

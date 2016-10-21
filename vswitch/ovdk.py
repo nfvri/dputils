@@ -27,14 +27,14 @@ class OvsDpdk(object):
         run(['rm', '-rf', conf.OVS_DIR])
 
     def db_create(self):
-        run(['rm', '-rf', conf.OVSDB_CONF])
-        run(['mkdir', '-p', conf.OVS_ETC_DIR])
-        run(['mkdir', '-p', conf.OVS_RUN_DIR])
-        run([conf.OVS_DIR + '/ovsdb/ovsdb-tool', 'create', conf.OVSDB_CONF, conf.OVSDB_SCHEMA])
+        run(['sudo', 'rm', '-rf', conf.OVSDB_CONF])
+        run(['sudo', 'mkdir', '-p', conf.OVS_ETC_DIR])
+        run(['sudo', 'mkdir', '-p', conf.OVS_RUN_DIR])
+        run(['sudo', conf.OVS_DIR + '/ovsdb/ovsdb-tool', 'create', conf.OVSDB_CONF, conf.OVSDB_SCHEMA])
 
     def db_clean(self):
-        run(['pkill', '-KILL', 'ovsdb-server'])
-        run('rm -rf ' + conf.OVS_RUN_DIR + '/* ' +
+        run(['sudo', 'pkill', '-KILL', 'ovsdb-server'])
+        run('sudo rm -rf ' + conf.OVS_RUN_DIR + '/* ' +
                         conf.OVS_ETC_DIR + '/* ' +
                         conf.OVS_LOG_DIR + '/*',
                         do_shell=True)
@@ -43,7 +43,7 @@ class OvsDpdk(object):
         run(self._vsctl_cmd + ['init'])
 
     def db_start(self):
-        run([conf.OVS_DIR + '/ovsdb/ovsdb-server', '--remote=punix:' + conf.OVSDB_SOCK,
+        run(['sudo', conf.OVS_DIR + '/ovsdb/ovsdb-server', '--remote=punix:' + conf.OVSDB_SOCK,
                          '--remote=db:Open_vSwitch,Open_vSwitch,manager_options', '--pidfile', '--detach',
                          conf.OVSDB_CONF])
 
@@ -87,7 +87,7 @@ class OvsDpdk(object):
         sleep(conf.SLEEP_SECS)
 
     def br_show(self, br):
-        run(self._vsctl_cmd + ['show', br])
+        run(self._ofctl_cmd + ['show', br])
 
     def dpdk_port_add(self, br, port, rx_queues=None, rx_aff=None, rx_size=None, tx_queues=None, tx_aff=None,
                       tx_size=None):
@@ -95,19 +95,20 @@ class OvsDpdk(object):
         sleep(conf.SLEEP_SECS)
 
         if rx_queues:
-            run(self._vsctl_cmd + ['set', 'Interface', port, 'options:n_rxq=' + rx_queues])
+            run(self._vsctl_cmd + ['set', 'Interface', port, 'options:n_rxq=' + str(rx_queues)])
         if rx_size:
-            run(self._vsctl_cmd + ['set', 'Interface', port, 'options:n_rxq_desc=' + rx_size])
+            run(self._vsctl_cmd + ['set', 'Interface', port, 'options:n_rxq_desc=' + str(rx_size)])
         if rx_aff:
             run(
-                self._vsctl_cmd + ['set', 'Interface', port, 'other_config:pmd-rxq-affinity="' + rx_aff + '"'])
+                self._vsctl_cmd + ['set', 'Interface', port, 'other_config:pmd-rxq-affinity="' + str(rx_aff) + '"'])
+    
         if tx_queues:
-            run(self._vsctl_cmd + ['set', 'Interface', port, 'options:n_txq=' + tx_queues])
-        if rx_size:
-            run(self._vsctl_cmd + ['set', 'Interface', port, 'options:n_txq_desc=' + tx_size])
-        if rx_aff:
+            run(self._vsctl_cmd + ['set', 'Interface', port, 'options:n_txq=' + str(tx_queues)])
+        if tx_size:
+            run(self._vsctl_cmd + ['set', 'Interface', port, 'options:n_txq_desc=' + str(tx_size)])
+        if tx_aff:
             run(
-                self._vsctl_cmd + ['set', 'Interface', port, 'other_config:pmd-txq-affinity="' + tx_aff + '"'])
+                self._vsctl_cmd + ['set', 'Interface', port, 'other_config:pmd-txq-affinity="' + str(tx_aff) + '"'])
 
     def vhost_port_add(self, br, port):
         run(self._vsctl_cmd + ['add-port', br, port, '--', 'set', 'Interface', port, 'type=dpdkvhostuser'])
@@ -131,11 +132,11 @@ class OvsDpdk(object):
         # Create a pmap to map a symbolic port name to its number, e.g. pmap['vhost-user1'] = '8'
         pmap = {}
         out = run(self._ofctl_cmd + ['show', br], get_out=True)
-        for line in out:
-            # output example:  8(vhost-user1): addr:00:00:00:00:00:00
-            match = re.search(r'(.*)\((.*)\): addr:', line)
-            if match:
-                pmap[match.group(2).strip()] = match.group(1).strip()
+
+        # output example:  8(vhost-user1): addr:00:00:00:00:00:00
+        matches = re.findall(r'(.*)\((.*)\): addr:', out)
+        for m in matches:
+            pmap[m[1].strip()] = m[0].strip()
 
         if in_port not in pmap.keys():
             sys.exit(in_port + ' is not a valid port name')

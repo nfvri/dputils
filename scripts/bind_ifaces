@@ -8,6 +8,7 @@ if __name__ == '__main__':
     logging.basicConfig(level=logging.DEBUG, format="----[%(asctime)s ]: %(message)s")
     parser = argparse.ArgumentParser(description='Bind interfaces to igb_uio driver')
     parser.add_argument('--interfaces',
+                        required=True,
                         dest='interfaces',
                         action='store',
                         help='Comma separated list of interface PCI ids (e.g. 0000:01:00.0,0000:01:00.1)')

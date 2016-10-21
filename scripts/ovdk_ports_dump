@@ -7,7 +7,7 @@ import argparse
 if __name__ == '__main__':
     logging.basicConfig(level=logging.DEBUG, format="----[%(asctime)s ]: %(message)s")
     parser = argparse.ArgumentParser(description='Dump stats of all ports on an OVS-DPDK bridge')
-    parser.add_argument('--bridge', dest='bridge', action='store', help='Bridge name')
+    parser.add_argument('--bridge', required=True, dest='bridge', action='store', help='Bridge name')
     args = parser.parse_args()
 
     ovdk = OvsDpdk()

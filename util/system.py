@@ -17,7 +17,7 @@ def run(cmd, do_check=True, do_shell=False, get_out=False):
     logging.debug(cmd_str)
 
     if get_out:
-        return subprocess.run(cmd, check=do_check, shell=do_shell, stdout=subprocess.PIPE).stdout
+        return subprocess.run(cmd, check=do_check, shell=do_shell, stdout=subprocess.PIPE, universal_newlines=True).stdout
     else:
         subprocess.run(cmd, check=do_check, shell=do_shell)
 
