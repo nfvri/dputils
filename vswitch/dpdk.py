@@ -26,6 +26,9 @@ class Dpdk(object):
     def unmount_huge(self):
         run(['sudo', 'umount', '/dev/hugepages'])
 
+    def bind_status(self):
+        run(['sudo', conf.DPDK_DIR + '/tools/dpdk-devbind.py', '--status'])
+
     def bind_igb_uio(self, ifaces):
         """
         Bind interfaces to the igb_uio driver
