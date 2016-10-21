@@ -33,7 +33,7 @@ class OvsDpdk(object):
         run(['sudo', conf.OVS_DIR + '/ovsdb/ovsdb-tool', 'create', conf.OVSDB_CONF, conf.OVSDB_SCHEMA])
 
     def db_clean(self):
-        run(['sudo', 'pkill', '-KILL', 'ovsdb-server'])
+        run(['sudo', 'pkill', '-KILL', 'ovsdb-server'], do_check=False)
         run('sudo rm -rf ' + conf.OVS_RUN_DIR + '/* ' +
                         conf.OVS_ETC_DIR + '/* ' +
                         conf.OVS_LOG_DIR + '/*',
@@ -72,7 +72,7 @@ class OvsDpdk(object):
             ['sudo', conf.OVS_DIR + '/vswitchd/ovs-vswitchd', 'unix:' + conf.OVSDB_SOCK, '--pidfile', '--detach'])
 
     def stop(self):
-        run(['sudo', 'pkill', '-KILL', 'ovs-switchd'])
+        run(['sudo', 'pkill', '-KILL', 'ovs-vswitchd'], do_check=False)
         run('sudo rm -rf ' + conf.OVS_RUN_DIR + '/*', do_shell=True)
 
     def show(self):
