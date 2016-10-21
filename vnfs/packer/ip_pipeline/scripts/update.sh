@@ -1,17 +1,11 @@
 #!/bin/bash
-# Update the box
-useradd -m -s /bin/bash -p $(openssl passwd -crypt $2) -U $2
-echo "$2 ALL=(ALL) NOPASSWD:ALL" | tee -a /etc/sudoers
 
-http_proxy=$1
-https_proxy=$http_proxy
+useradd -m -s /bin/bash -p $(openssl passwd -crypt $guest_user) -U $guest_password
+echo "$guest_user ALL=(ALL) NOPASSWD:ALL" | tee -a /etc/sudoers
 
 # Bypass proxy settings if http_proxy is empty
 if [ ! -z "$http_proxy" ]
 then
-    export http_proxy
-    export https_proxy
-
     echo "http_proxy=$http_proxy" | sudo tee -a /etc/environment
     echo "https_proxy=$https_proxy" | sudo tee -a /etc/environment
     echo "HTTP_PROXY=$http_proxy" | sudo tee -a /etc/environment
