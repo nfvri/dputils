@@ -41,6 +41,41 @@
                 "passwd/username={{user `guest_user`}} ",
                 "initrd=/install/initrd.gz -- <enter>"
             ]
+        },
+
+        {
+            "name": "ubuntu-1610-server",
+            "type": "qemu",
+            "format": "qcow2",
+            "accelerator": "kvm",
+            "disk_size": "10000",
+            "iso_url": "http://releases.ubuntu.com/16.10/ubuntu-16.10-server-amd64.iso",
+            "iso_checksum": "7d6de832aee348bacc894f0a2ab1170d",
+            "iso_checksum_type": "md5",
+            "net_device": "virtio-net",
+            "disk_interface": "virtio",
+            "http_directory": "http",
+            "output_directory": "out",
+            "ssh_username": "{{user `guest_user`}}",
+            "ssh_password": "{{user `guest_password`}}",
+            "ssh_wait_timeout": "60m",
+            "shutdown_command": "echo '{{user `guest_password`}}'|sudo -S shutdown -P now",
+            "boot_wait": "5s",
+            "boot_command": [
+                "<esc><esc><enter><wait>",
+                "/install/vmlinuz url=http://{{ .HTTPIP }}:{{ .HTTPPort }}/preseed.cfg ",
+                "debian-installer=en_US auto locale=en_US kbd-chooser/method=us ",
+                "hostname={{ .Name }} ",
+                "keyboard-configuration/modelcode=SKIP ",
+                "keyboard-configuration/layout=USA ",
+                "keyboard-configuration/variant=USA ",
+		"passwd/root-login=false <wait>",
+                "passwd/user-fullname={{user `guest_user`}} ",
+                "passwd/user-password-again={{user `guest_password`}} ",
+                "passwd/user-password={{user `guest_password`}} ",
+                "passwd/username={{user `guest_user`}} ",
+                "initrd=/install/initrd.gz -- <enter>"
+            ]
         }
     ],
 
@@ -53,7 +88,7 @@
 		    "https_proxy={{user `https_proxy`}}",
 		    "guest_user={{user `guest_user`}}",
 		    "guest_password={{user `guest_password`}}"   ],
-            "scripts": [ "scripts/update.sh" ]
+            "scripts": [ "provision/provision.sh" ]
         }
     ]
 }
