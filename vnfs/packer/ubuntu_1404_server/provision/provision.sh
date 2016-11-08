@@ -19,3 +19,8 @@ fi
 
 sudo apt-get -y update
 sudo apt-get -y upgrade
+
+# assumes the user-defined startup.sh script has already been copied under /etc/init.d
+sudo mv /tmp/startup.sh /etc/init.d/startup.sh
+sudo chmod ugo+x /etc/init.d/startup.sh
+sudo update-rc.d startup.sh defaults
