@@ -9,13 +9,13 @@
     "builders":
     [
         {
-            "name": "ubuntu-1404-server",
+            "name": "ubuntu-1604-server",
             "type": "qemu",
             "format": "qcow2",
             "accelerator": "kvm",
-            "disk_size": "10000",
-            "iso_url": "http://releases.ubuntu.com/14.04/ubuntu-14.04.5-server-amd64.iso",
-            "iso_checksum": "dd54dc8cfc2a655053d19813c2f9aa9f",
+            "disk_size": "30000",
+            "iso_url": "http://releases.ubuntu.com/16.04/ubuntu-16.04.2-server-amd64.iso",
+            "iso_checksum": "2bce60d18248df9980612619ff0b34e6",
             "iso_checksum_type": "md5",
             "net_device": "virtio-net",
             "disk_interface": "virtio",
