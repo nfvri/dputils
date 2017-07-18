@@ -1,7 +1,18 @@
 # vim: set syntax=python
-
 BASE_DIR = '/opt/nfvacc'
-DPDK_DIR = BASE_DIR + '/dpdk-16.07'
+
+DPDK_VERSION = '16.07.2'
+DPDK_VERSION = '16.11.2'
+
+
+DPDK_XZ_FILE = 'dpdk-' + DPDK_VERSION + '.tar.xz'
+DPDK_XZ_URL = 'http://fast.dpdk.org/rel/' + DPDK_XZ_FILE
+DPDK_XZ_PATH = BASE_DIR + '/tarballs/'
+DPDK_DIR = BASE_DIR + '/dpdk-stable-' + DPDK_VERSION
+
+
+
+
 DPDK_TARGET = 'x86_64-native-linuxapp-gcc'
 DPDK_BUILD = DPDK_DIR + '/' + DPDK_TARGET
 OVS_VERSION = '2.6.0'

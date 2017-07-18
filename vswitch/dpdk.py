@@ -4,14 +4,13 @@ from util.system import run
 
 class Dpdk(object):
     def install(self):
-        run(['mkdir', '-p', conf.BASE_DIR + '/tarballs'])
-        run(
-            ['wget', '-nc', 'http://dpdk.org/browse/dpdk/snapshot/dpdk-16.07.zip', '-P', conf.BASE_DIR + '/tarballs'])
-        run(['unzip', '-n', conf.BASE_DIR + '/tarballs/dpdk-16.07.zip', '-d', conf.BASE_DIR])
-        run('cd ' + conf.DPDK_DIR + ' && make install T=' + conf.DPDK_TARGET + ' DESTDIR=install', do_shell=True)
+        run(['sudo','mkdir', '-p', conf.BASE_DIR + '/tarballs'])
+        run(['sudo', '-E', 'wget', '-nc', conf.DPDK_XZ_URL, '-P', conf.DPDK_XZ_PATH])
+        run(['sudo', 'tar', 'xf', conf.DPDK_XZ_PATH + conf.DPDK_XZ_FILE, '-C', conf.BASE_DIR])
+        run('cd ' + conf.DPDK_DIR + ' && sudo make install T=' + conf.DPDK_TARGET + ' DESTDIR=install', do_shell=True)
 
     def uninstall(self):
-        run(['rm', '-rf', conf.DPDK_DIR])
+        run(['sudo', 'rm', '-rf', conf.DPDK_DIR])
 
     def unload_modules(self):
         run(['sudo', 'rmmod', 'igb_uio'])
