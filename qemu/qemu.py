@@ -73,7 +73,7 @@ class QemuVhostuser(object):
             vectors = int(nqueues) * 2 + 2
             mac = prefix + format(ind, '02x')
             self._vhostuser_ports_macs.append(mac)
-            netcmd = ['-chardev', 'socket,id=' + chardev_id + ',path=' + conf.VHOST_SOCK_DIR + port_name,
+            netcmd = ['-chardev', 'socket,id=' + chardev_id + ',path=' + conf.OVS_VHOST_SOCKETS_DIR + port_name,
                       '-netdev', 'type=vhost-user,id=' + netdev_id + ',chardev=' + chardev_id + ',vhostforce,queues=' + nqueues,
                       '-device', 'virtio-net-pci,mac=' + mac + ',netdev=' + netdev_id + ',mq=on,vectors=' + str(vectors)
                       ]

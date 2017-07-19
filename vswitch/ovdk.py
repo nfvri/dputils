@@ -48,14 +48,14 @@ class OvsDpdk(object):
              conf.OVSDB_CONF])
 
     def start(self, dpdk_socket_mem=None, dpdk_lcore_mask=None, dpdk_pmd_mask=None):
-        run(['sudo', 'mkdir', '-p', conf.OVS_RUN_DIR + '/' + conf.OVS_VHOST_SUBDIR])
+        run(['sudo', 'mkdir', '-p', conf.OVS_VHOST_SOCKETS_DIR])
         # specify OVS to initialize and support DPDK ports
         run(self._vsctl_cmd + ['set', 'Open_vSwitch', '.', 'other_config:dpdk-init=true'])
         # specify huge pages directory
         run(self._vsctl_cmd + ['set', 'Open_vSwitch', '.', 'other_config:dpdk-hugepage-dir=/dev/hugepages'])
         # set path to vhost_user unix socket
         run(self._vsctl_cmd + ['set', 'Open_vSwitch', '.',
-                               'other_config:vhost-sock-dir="' + conf.OVS_VHOST_SUBDIR + '"'])
+                               'other_config:vhost-sock-dir="' + conf.OVS_VHOST_SOCKETS_DIR + '"'])
         # set memory
         if dpdk_socket_mem:
             run(self._vsctl_cmd + ['set', 'Open_vSwitch', '.',
