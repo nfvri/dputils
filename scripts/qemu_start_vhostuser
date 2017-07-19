@@ -18,7 +18,7 @@ if __name__ == '__main__':
                         help='Number of CPU sockets to simulate')
     parser.add_argument('--qcow2-image', dest='qcow2_image', action='store',
                         help='Path of QCOW2 image')
-    parser.add_argument('--cores-per-sock', dest='cores_per_sock',
+    parser.add_argument('--cores-per-socket', dest='cores_per_socket',
                         action='store', help='Number of cores per socket')
     parser.add_argument('--vhostuser-ports-socks', dest='vhostuser_ports_socks',
                         action='store', help='Comma separated list of vhostuser ports socket paths')
@@ -26,6 +26,6 @@ if __name__ == '__main__':
                         action='store', help='Comma separated list of vhostuser ports queues')
     args = parser.parse_args()
 
-    guest = QemuVhostuser(args.cpu_list, args.name, args.enable_kvm, args.guest_mem, args.nsockets, args.cores_per_sock,
+    guest = QemuVhostuser(args.cpu_list, args.name, args.enable_kvm, args.guest_mem, args.nsockets, args.cores_per_socket,
                           args.qcow2_image, args.vhostuser_ports_socks, args.vhostuser_ports_queues)
     guest.start()

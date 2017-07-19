@@ -4,14 +4,12 @@ BASE_DIR = '/opt/nfvacc'
 DPDK_VERSION = '16.07.2'
 DPDK_VERSION = '16.11.2'
 
-
 DPDK_XZ_FILE = 'dpdk-' + DPDK_VERSION + '.tar.xz'
 DPDK_XZ_URL = 'http://fast.dpdk.org/rel/' + DPDK_XZ_FILE
-DPDK_XZ_PATH = BASE_DIR + '/tarballs/'
+DPDK_XZ_DIR = BASE_DIR + '/tarballs/'
 DPDK_DIR = BASE_DIR + '/dpdk-stable-' + DPDK_VERSION
 
-
-
+NR_HUGEPAGES = 16384
 
 DPDK_TARGET = 'x86_64-native-linuxapp-gcc'
 DPDK_BUILD = DPDK_DIR + '/' + DPDK_TARGET
@@ -30,9 +28,15 @@ OVSDB_SOCK = OVS_RUN_DIR + '/db.sock'
 OVSDB_CONF = OVS_ETC_DIR + '/conf.db'
 OVSDB_LOG_FILE = OVS_LOG_DIR + '/ovsdb-server.log'
 OVSDB_PID_FILE = OVS_RUN_DIR + '/ovsdb-server.pid'
+VHOST_SOCK_DIR = OVS_RUN_DIR
 OVS_VHOST_SUBDIR = 'vhost-sock'
 
 SLEEP_SECS = '1'
 
 QEMU_VERSION = '2.7.0'
-QEMU_DIR = BASE_DIR + '/qemu-' + QEMU_VERSION
+QEMU_PKG_FILE = 'qemu-' + QEMU_VERSION + '.tar.bz2'
+QEMU_PKG_URL = 'http://wiki.qemu-project.org/download/' + QEMU_PKG_FILE
+QEMU_PKG_DIR = BASE_DIR + '/tarballs/'
+QEMU_DIR = BASE_DIR + '/qemu-' + QEMU_VERSION + '/'
+QEMU_BIN = QEMU_DIR + '/x86_64-softmmu/qemu-system-x86_64'
+

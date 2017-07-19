@@ -5,8 +5,8 @@ from util.system import run
 class Dpdk(object):
     def install(self):
         run(['sudo','mkdir', '-p', conf.BASE_DIR + '/tarballs'])
-        run(['sudo', '-E', 'wget', '-nc', conf.DPDK_XZ_URL, '-P', conf.DPDK_XZ_PATH])
-        run(['sudo', 'tar', 'xf', conf.DPDK_XZ_PATH + conf.DPDK_XZ_FILE, '-C', conf.BASE_DIR])
+        run(['sudo', '-E', 'wget', '-nc', conf.DPDK_XZ_URL, '-P', conf.DPDK_XZ_DIR])
+        run(['sudo', 'tar', 'xf', conf.DPDK_XZ_DIR + conf.DPDK_XZ_FILE, '-C', conf.BASE_DIR])
         run('cd ' + conf.DPDK_DIR + ' && sudo make install T=' + conf.DPDK_TARGET + ' DESTDIR=install', do_shell=True)
 
     def uninstall(self):
@@ -20,6 +20,7 @@ class Dpdk(object):
         run(['sudo', 'insmod', conf.DPDK_DIR + '/x86_64-native-linuxapp-gcc/kmod/igb_uio.ko'])
 
     def mount_huge(self):
+        run(['sudo', 'sysctl', '-w', 'vm.nr_hugepages=' + str(conf.NR_HUGEPAGES)])
         run(['sudo', 'mount', '-t', 'hugetlbfs', 'none', '/dev/hugepages'])
 
     def unmount_huge(self):

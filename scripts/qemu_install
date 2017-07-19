@@ -1,0 +1,8 @@
+#! /usr/bin/env python3
+
+from qemu import qemu
+import logging
+
+if __name__ == '__main__':
+    logging.basicConfig(level=logging.DEBUG, format="----[%(asctime)s ]: %(message)s")
+    qemu.install()
