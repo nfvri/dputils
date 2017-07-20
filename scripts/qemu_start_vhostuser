@@ -20,12 +20,11 @@ if __name__ == '__main__':
                         help='Path of QCOW2 image')
     parser.add_argument('--cores-per-socket', dest='cores_per_socket',
                         action='store', help='Number of cores per socket')
-    parser.add_argument('--vhostuser-ports-socks', dest='vhostuser_ports_socks',
-                        action='store', help='Comma separated list of vhostuser ports socket paths')
-    parser.add_argument('--vhostuser-ports-queues', dest='vhostuser_ports_queues',
-                        action='store', help='Comma separated list of vhostuser ports queues')
+    parser.add_argument('--interfaces', dest='interfaces',
+                        action='store',
+                        help='''Comma separated list of interfaces, e.g. [{"port":"vhost-user-1","queues":2,"mac":"00:00:00:00:00:01"},{"port":"vhost-user-2","queues":1}]'''  )
     args = parser.parse_args()
 
     guest = QemuVhostuser(args.cpu_list, args.name, args.enable_kvm, args.guest_mem, args.nsockets, args.cores_per_socket,
-                          args.qcow2_image, args.vhostuser_ports_socks, args.vhostuser_ports_queues)
+                          args.qcow2_image, args.interfaces)
     guest.start()

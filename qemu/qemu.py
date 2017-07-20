@@ -17,8 +17,7 @@ def uninstall():
 
 class QemuVhostuser(object):
     def __init__(self, cpu_list, name, enable_kvm, guest_mem, nsockets,
-                 cores_per_socket, qcow2_image, vhostuser_ports_names,
-                 vhostuser_ports_nqueues):
+                 cores_per_socket, qcow2_image, interfaces):
         self._cpu_list = cpu_list
         self._name = name
         self._enable_kvm = enable_kvm
@@ -26,9 +25,7 @@ class QemuVhostuser(object):
         self._nsockets = nsockets
         self._cores_per_socket = cores_per_socket
         self._qcow2_image = qcow2_image
-        self._netdevs = json.loads(netdevs)
-        self._vhostuser_ports_names = vhostuser_ports_names
-        self._vhostuser_ports_nqueues = vhostuser_ports_nqueues
+        self._ifaces = json.loads(interfaces)
         self._vhostuser_ports_macs = []
         self._pid = -1
         self._pidfile = None
@@ -65,40 +62,26 @@ class QemuVhostuser(object):
 
         prefix = self._mac_prefix()
 
-# TODO: user-specified MACs
         ind = 0
-        for dev in self._netdevs:
+        for dev in self._ifaces:
             if 'mac' not in dev:
                 dev['mac'] = prefix + format(ind, '02x')
-            chardev_id = self._name + '_chardev' + str(ind)
-            netdev_id = self._name + '_netdev' + str(ind)
-            vectors = int(nqueues) * 2 + 2
-            netcmd = ['-chardev', 'socket,id=' + chardev_id + ',path=' + conf.OVS_VHOST_SOCKETS_DIR + dev['port_name,
-                  '-netdev',
-                  'type=vhost-user,id=' + netdev_id + ',chardev=' + chardev_id + ',vhostforce,queues=' + nqueues,
-                  '-device', 'virtio-net-pci,mac=' + mac + ',netdev=' + netdev_id + ',mq=on,vectors=' + str(vectors)
+            chardev = self._name + '_chardev' + str(ind)
+            netdev = self._name + '_netdev' + str(ind)
+            vectors = int(dev['queues']) * 2 + 2
+            netcmd = ['-chardev',
+                      'socket,id=' + chardev + ',path=' + conf.OVS_VHOST_SOCKETS_DIR + dev['port'],
+                      '-netdev',
+                      'type=vhost-user,id=' + netdev + ',chardev=' + chardev + ',vhostforce,queues=' + str(dev['queues']),
+                      '-device',
+                      'virtio-net-pci,mac=' + dev['mac'] + ',netdev=' + netdev + ',mrg_rxbuf=off,mq=on,vectors=' + str(vectors)
                   ]
-        cmd = cmd + netcmd
-        ind += 1
-
-        ind = 0
-        for (port_name, nqueues) in zip(self._vhostuser_ports_names.split(','),
-                                   self._vhostuser_ports_nqueues.split(',')):
-            chardev_id = self._name + '_chardev' + str(ind)
-            netdev_id = self._name + '_netdev' + str(ind)
-            vectors = int(nqueues) * 2 + 2
-            mac = prefix + format(ind, '02x')
-            self._vhostuser_ports_macs.append(mac)
-            netcmd = ['-chardev', 'socket,id=' + chardev_id + ',path=' + conf.OVS_VHOST_SOCKETS_DIR + port_name,
-                      '-netdev', 'type=vhost-user,id=' + netdev_id + ',chardev=' + chardev_id + ',vhostforce,queues=' + nqueues,
-                      '-device', 'virtio-net-pci,mac=' + mac + ',netdev=' + netdev_id + ',mq=on,vectors=' + str(vectors)
-                      ]
             cmd = cmd + netcmd
             ind += 1
 
         # TODO: execute cmd
         print(cmd)
-        self._init_pid()
+        # self._init_pid()
 
     """
      sudo -E  taskset -c 0x20 qemu-system-x86_64 
