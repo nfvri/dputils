@@ -14,10 +14,9 @@ class OvsDpdk(object):
         self._ofctl_cmd = ['sudo', conf.OVS_DIR + '/utilities/ovs-ofctl']
 
     def install(self):
-        run(['sudo', 'mkdir', '-p', conf.BASE_DIR + '/tarballs'])
-        tarball = 'openvswitch-' + conf.OVS_VERSION + '.tar.gz'
-        run(['sudo', '-E', 'wget', '-nc', 'http://openvswitch.org/releases/' + tarball, '-P', conf.BASE_DIR + '/tarballs'])
-        run(['sudo', 'tar', '-zxvf', conf.BASE_DIR + '/tarballs/' + tarball, '--directory', conf.BASE_DIR])
+        run(['sudo', 'mkdir', '-p', conf.TARBALLS_DIR])
+        run(['sudo', '-E', 'wget', '-nc', conf.OVS_TARBALL_URL, '-P', conf.TARBALLS_DIR])
+        run(['sudo', 'tar', '-zxvf', conf.TARBALLS_DIR + conf.OVS_TARBALL_FILE, '--directory', conf.BASE_DIR])
         run('cd ' + conf.OVS_DIR +
             ' && sudo ./boot.sh ' +
             ' && sudo ./configure --with-dpdk=' + conf.DPDK_BUILD +

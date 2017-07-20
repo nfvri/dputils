@@ -1,13 +1,14 @@
 import hashlib
 import os
+import json
 
 import conf
 from util.system import run,kill
 
 
 def install():
-    run(['sudo', '-E', 'wget', '-nc', conf.QEMU_PKG_URL, '-P', conf.QEMU_PKG_DIR])
-    run(['sudo', 'tar', '-jxvf', conf.QEMU_PKG_DIR + conf.QEMU_PKG_FILE, '--directory', conf.BASE_DIR])
+    run(['sudo', '-E', 'wget', '-nc', conf.QEMU_TARBALL_URL, '-P', conf.TARBALLS_DIR])
+    run(['sudo', 'tar', '-jxvf', conf.TARBALLS_DIR + conf.QEMU_TARBALL_FILE, '--directory', conf.BASE_DIR])
     run('cd ' + conf.QEMU_DIR + ' && sudo ./configure --target-list=x86_64-softmmu --enable-debug --enable-kvm --enable-numa && sudo make',
         do_shell=True)
 
@@ -25,6 +26,7 @@ class QemuVhostuser(object):
         self._nsockets = nsockets
         self._cores_per_socket = cores_per_socket
         self._qcow2_image = qcow2_image
+        self._netdevs = json.loads(netdevs)
         self._vhostuser_ports_names = vhostuser_ports_names
         self._vhostuser_ports_nqueues = vhostuser_ports_nqueues
         self._vhostuser_ports_macs = []
@@ -64,6 +66,20 @@ class QemuVhostuser(object):
         prefix = self._mac_prefix()
 
 # TODO: user-specified MACs
+        ind = 0
+        for dev in self._netdevs:
+            if 'mac' not in dev:
+                dev['mac'] = prefix + format(ind, '02x')
+            chardev_id = self._name + '_chardev' + str(ind)
+            netdev_id = self._name + '_netdev' + str(ind)
+            vectors = int(nqueues) * 2 + 2
+            netcmd = ['-chardev', 'socket,id=' + chardev_id + ',path=' + conf.OVS_VHOST_SOCKETS_DIR + dev['port_name,
+                  '-netdev',
+                  'type=vhost-user,id=' + netdev_id + ',chardev=' + chardev_id + ',vhostforce,queues=' + nqueues,
+                  '-device', 'virtio-net-pci,mac=' + mac + ',netdev=' + netdev_id + ',mq=on,vectors=' + str(vectors)
+                  ]
+        cmd = cmd + netcmd
+        ind += 1
 
         ind = 0
         for (port_name, nqueues) in zip(self._vhostuser_ports_names.split(','),

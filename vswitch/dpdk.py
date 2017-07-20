@@ -4,9 +4,9 @@ from util.system import run
 
 class Dpdk(object):
     def install(self):
-        run(['sudo','mkdir', '-p', conf.BASE_DIR + '/tarballs'])
-        run(['sudo', '-E', 'wget', '-nc', conf.DPDK_XZ_URL, '-P', conf.DPDK_XZ_DIR])
-        run(['sudo', 'tar', 'xf', conf.DPDK_XZ_DIR + conf.DPDK_XZ_FILE, '-C', conf.BASE_DIR])
+        run(['sudo','mkdir', '-p', conf.TARBALLS_DIR])
+        run(['sudo', '-E', 'wget', '-nc', conf.DPDK_TARBALL_URL, '-P', conf.TARBALLS_DIR])
+        run(['sudo', 'tar', 'xf', conf.TARBALLS_DIR + conf.DPDK_TARBALL_FILE, '-C', conf.BASE_DIR])
         run('cd ' + conf.DPDK_DIR + ' && sudo make install T=' + conf.DPDK_TARGET + ' DESTDIR=install', do_shell=True)
 
     def uninstall(self):
