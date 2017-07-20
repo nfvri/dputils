@@ -1,8 +1,22 @@
 # nfv-stress
 
-## Requirements
-- `/opt/nfvacc` must exist and by read/write-accessible
-- inte
+## Steps
+
+```
+cd scripts
+./dpdk_install
+./ovdk_install
+./qemu_install
+
+./dpdk_unload_modules
+./dpdk_load_modules
+./dpdk_unmount_huge
+./dpdk_mount_huge
+./dpdk_bind_status
+./dpdk_bind_ifaces --interfaces 0000:03:00.0,0000:03:00.1
+./dpdk_bind_status
+
+```
 
 ## Root privileges
 - load/unload modules: insmod, modprobe, rmmod
