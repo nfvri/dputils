@@ -7,3 +7,4 @@ if __name__ == '__main__':
     logging.basicConfig(level=logging.DEBUG, format="----[%(asctime)s ]: %(message)s")
     ovdk = OvsDpdk()
     ovdk.stop()
+    ovdk.db_clean()

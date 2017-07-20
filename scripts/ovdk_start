@@ -19,4 +19,8 @@ if __name__ == '__main__':
     args = parser.parse_args()
 
     ovdk = OvsDpdk()
+
+    ovdk.db_create()
+    ovdk.db_start()
+    ovdk.db_init()
     ovdk.start(args.dpdk_socket_mem, args.dpdk_lcore_mask, args.dpdk_pmd_mask)

@@ -88,9 +88,12 @@ class OvsDpdk(object):
     def br_show(self, br):
         run(self._ofctl_cmd + ['show', br])
 
-    def dpdk_port_add(self, br, port, rx_queues=None, rx_aff=None, rx_size=None, tx_queues=None, tx_aff=None,
+    def dpdk_port_add(self, br, port, pci_addr, rx_queues=None, rx_aff=None, rx_size=None, tx_queues=None, tx_aff=None,
                       tx_size=None):
-        run(self._vsctl_cmd + ['add-port', br, port, '--', 'set', 'Interface', port, 'type=dpdk'])
+        cmd = self._vsctl_cmd + ['add-port', br, port, '--', 'set', 'Interface', port, 'type=dpdk']
+        if conf.OVS_VERSION == '2.7.0':
+            cmd = cmd + ['options:dpdk-devargs=' + pci_addr]
+        run(cmd)
         sleep(conf.SLEEP_SECS)
 
         if rx_queues:

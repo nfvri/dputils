@@ -9,6 +9,7 @@ if __name__ == '__main__':
     parser = argparse.ArgumentParser(description='Add a DPDK port to an OVS-DPDK bridge')
     parser.add_argument('--bridge', required=True, dest='bridge', action='store', help='Bridge name')
     parser.add_argument('--port', required=True, dest='port', action='store', help='Port name (e.g. dpdk0)')
+    parser.add_argument('--pci-addr', required=True, dest='pci_addr', action='store', help='Port PCI address')
     parser.add_argument('--rx-queues', dest='rx_queues', action='store', help='Number of RX queues')
     parser.add_argument('--rx-aff', dest='rx_aff', action='store', help='RX queues affinity (e.g. "0:0,1:2")')
     parser.add_argument('--rx-size', dest='rx_size', action='store', help='RX queues size (e.g. 1000)')
@@ -18,5 +19,5 @@ if __name__ == '__main__':
     args = parser.parse_args()
 
     ovdk = OvsDpdk()
-    ovdk.dpdk_port_add(args.bridge, args.port, args.rx_queues, args.rx_aff, args.rx_size, args.tx_queues, args.tx_aff,
+    ovdk.dpdk_port_add(args.bridge, args.port, args.pci_addr, args.rx_queues, args.rx_aff, args.rx_size, args.tx_queues, args.tx_aff,
                        args.tx_size)
