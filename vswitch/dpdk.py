@@ -13,7 +13,7 @@ class Dpdk(object):
         run(['sudo', 'rm', '-rf', conf.DPDK_DIR])
 
     def unload_modules(self):
-        run(['sudo', 'rmmod', 'igb_uio'])
+        run(['sudo', 'rmmod', '-f', 'igb_uio'])
 
     def load_modules(self):
         run(['sudo', 'modprobe', 'uio'])

@@ -23,7 +23,7 @@ class OvsDpdk(object):
             ' && sudo make', do_shell=True)
 
     def uninstall(self):
-        run(['rm', '-rf', conf.OVS_DIR])
+        run(['sudo','rm', '-rf', conf.OVS_DIR])
 
     def db_create(self):
         run(['sudo', 'rm', '-rf', conf.OVSDB_CONF])
@@ -53,8 +53,8 @@ class OvsDpdk(object):
         # specify huge pages directory
         run(self._vsctl_cmd + ['set', 'Open_vSwitch', '.', 'other_config:dpdk-hugepage-dir=/dev/hugepages'])
         # set path to vhost_user unix socket
-        run(self._vsctl_cmd + ['set', 'Open_vSwitch', '.',
-                               'other_config:vhost-sock-dir="' + conf.OVS_VHOST_SOCKETS_DIR + '"'])
+        #run(self._vsctl_cmd + ['set', 'Open_vSwitch', '.',
+        #                       'other_config:vhost-sock-dir="' + conf.OVS_VHOST_SOCKETS_DIR + '"'])
         # set memory
         if dpdk_socket_mem:
             run(self._vsctl_cmd + ['set', 'Open_vSwitch', '.',

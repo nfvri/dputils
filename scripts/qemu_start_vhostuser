@@ -18,13 +18,15 @@ if __name__ == '__main__':
                         help='Number of CPU sockets to simulate')
     parser.add_argument('--qcow2-image', dest='qcow2_image', action='store',
                         help='Path of QCOW2 image')
+    parser.add_argument('--cloud-init-config', dest='cloud_init_config', action='store',
+                        help='Path of cloud-init config ISO image')
     parser.add_argument('--cores-per-socket', dest='cores_per_socket',
                         action='store', help='Number of cores per socket')
     parser.add_argument('--interfaces', dest='interfaces',
                         action='store',
-                        help='''Comma separated list of interfaces, e.g. [{"port":"vhost-user-1","queues":2,"mac":"00:00:00:00:00:01"},{"port":"vhost-user-2","queues":1}]'''  )
+                        help='''Comma separated list of interfaces, e.g. '[{"port":"vhost-user-1","queues":2,"mac":"00:00:00:00:00:01"},{"port":"vhost-user-2","queues":1}]' '''  )
     args = parser.parse_args()
 
-    guest = QemuVhostuser(args.cpu_list, args.name, args.enable_kvm, args.guest_mem, args.nsockets, args.cores_per_socket,
-                          args.qcow2_image, args.interfaces)
+    guest = QemuVhostuser(args.cpu_list, args.name, args.enable_kvm, args.guest_mem, args.nsockets,
+                          args.cores_per_socket, args.qcow2_image, args.cloud_init_config, args.interfaces)
     guest.start()

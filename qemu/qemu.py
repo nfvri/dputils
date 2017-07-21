@@ -17,7 +17,7 @@ def uninstall():
 
 class QemuVhostuser(object):
     def __init__(self, cpu_list, name, enable_kvm, guest_mem, nsockets,
-                 cores_per_socket, qcow2_image, interfaces):
+                 cores_per_socket, qcow2_image, cloud_init_iso_image, interfaces):
         self._cpu_list = cpu_list
         self._name = name
         self._enable_kvm = enable_kvm
@@ -25,6 +25,7 @@ class QemuVhostuser(object):
         self._nsockets = nsockets
         self._cores_per_socket = cores_per_socket
         self._qcow2_image = qcow2_image
+        self._cloud_init_iso_image = cloud_init_iso_image
         self._ifaces = json.loads(interfaces)
         self._vhostuser_ports_macs = []
         self._pid = -1
@@ -43,7 +44,7 @@ class QemuVhostuser(object):
             self._pid = f.read().replace('\n', '')
 
     def start(self):
-        cmd = ['taskset', '-c', self._cpu_list, conf.QEMU_BIN,
+        cmd = ['sudo','taskset', '-c', self._cpu_list, conf.QEMU_BIN,
                '-name', self._name,
                '-cpu', 'host',
                '-m', self._guest_mem,
@@ -52,6 +53,7 @@ class QemuVhostuser(object):
                '-mem-prealloc',
                '-smp', 'sockets=' + str(self._nsockets) + ',cores=' + str(self._cores_per_socket),
                '-drive', 'file=' + self._qcow2_image,
+               '-drive', 'file=' + self._cloud_init_iso_image,
                '-nographic',
                '-snapshot',
                '-pidfile', '/tmp/' + self._name + '.pid',
@@ -81,6 +83,7 @@ class QemuVhostuser(object):
 
         # TODO: execute cmd
         print(cmd)
+        run(cmd)
         # self._init_pid()
 
     """

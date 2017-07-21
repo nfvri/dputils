@@ -35,7 +35,7 @@ OVSDB_SOCK = OVS_RUN_DIR + '/db.sock'
 OVSDB_CONF = OVS_ETC_DIR + '/conf.db'
 OVSDB_LOG_FILE = OVS_LOG_DIR + '/ovsdb-server.log'
 OVSDB_PID_FILE = OVS_RUN_DIR + '/ovsdb-server.pid'
-OVS_VHOST_SOCKETS_DIR = OVS_RUN_DIR + 'vhost-sock/'
+OVS_VHOST_SOCKETS_DIR = OVS_RUN_DIR
 
 SLEEP_SECS = '1'
 
