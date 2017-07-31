@@ -37,6 +37,16 @@ set -eux
 # Add vhost ports to bridge
 ./ovdk_vhostport_add --bridge fastbr0 --port vhost-user1
 ./ovdk_vhostport_add --bridge fastbr0 --port vhost-user2
+./ovdk_vhostport_add --bridge fastbr0 --port vhost-user3
+./ovdk_vhostport_add --bridge fastbr0 --port vhost-user4
+
+# Add port-to-port flows between vhost-user1 and vhost-user3
+./ovdk_flow_add_port2port --bridge fastbr0 --in-port vhost-user1 --out-ports vhost-user3
+./ovdk_flow_add_port2port --bridge fastbr0 --in-port vhost-user3 --out-ports vhost-user1
+
+# Add port-to-port flows between vhost-user1 and a physical interface (bypass if inter-VM traffic only)
+./ovdk_flow_add_port2port --bridge fastbr0 --in-port dev1 --out-ports vhost-user1
+./ovdk_flow_add_port2port --bridge fastbr0 --in-port vhost-user1 --out-ports dev1
 
 # Start QEMU instance with 2 interfaces, each bound on vhost-user1, vhost-user2 ports, respectively
  ./qemu_start_vhostuser --cpu-list 0,1 --name foo --enable-kvm --guest-mem 8192M --nsockets 1 --cores-per-socket 4 \
@@ -44,3 +54,10 @@ set -eux
       --cloud-init-config /store/images/nanastop/dpdk-test.configuration.iso \
       --interfaces '[{"port":"vhost-user1","queues":2},{"port":"vhost-user2","queues":2}]' 
       
+# Start QEMU instance with 2 interfaces, each bound on vhost-user3, vhost-user4 ports, respectively
+ ./qemu_start_vhostuser --cpu-list 0,1 --name bar --enable-kvm --guest-mem 8192M --nsockets 1 --cores-per-socket 4 \
+      --qcow2-image /store/images/nanastop/dpdk-test.root.img \
+      --cloud-init-config /store/images/nanastop/dpdk-test.configuration.iso \
+      --interfaces '[{"port":"vhost-user3","queues":2,"mac":"00:00:00:00:00:01"},{"port":"vhost-user4","queues":2,"mac":"00:00:00:00:00:02"}]' 
+      
+# Send traffic between VMs or from an external entity outside the server
