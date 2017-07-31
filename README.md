@@ -1,8 +1,21 @@
 # dputils
 
+Python wrappers for common dataplane actions based on DPDK. 
+For example:
+- build DPDK
+- setup hugepages
+- deploy OVS-DPDK
+- install port-to-port flows
+- create QEMU instances with `vhost-user`-type interfaces
+- ...
 
+Files:
+- `vswitch/dpdk.py`: DPDK actions
+- `vswitch/ovdk.py`: OVS-DPDK actions 
+- `qemu/qemu.py`: QEMU actions
+- `scripts`: executable scripts for every unitary action
 
-## Root privileges
+## Actions requiring root priviliges
 - load/unload modules: insmod, modprobe, rmmod
 - mount/umount huge memory pages: mount, umount
 - bind/unbind interfaces: for this we need recursive rw access to:
