@@ -9,11 +9,17 @@ if __name__ == '__main__':
     parser = argparse.ArgumentParser(description='Launch a QEMU instance')
     parser.add_argument('--cpu-list', dest='cpu_list', action='store',
                         help='CPU list to bind all QEMU threads (e.g. 0,1,2)')
-    parser.add_argument('--name', dest='name', action='store', help='VM name')
+    parser.add_argument('--name', dest='name', action='store', help='VM name', required=True)
     parser.add_argument('--enable-kvm', dest='enable_kvm', action='store_true',
-                        help='Use KVM acceleration')
+                        help='Enable KVM acceleration')
+    parser.add_argument('--no-enable-kvm', dest='enable_kvm', action='store_false',
+                        help='Disable KVM acceleration')
+    parser.add_argument('--snapshot', dest='snapshot', action='store_true',
+                        help='Do not write changes back to disk')
+    parser.add_argument('--no-snapshot', dest='snapshot', action='store_false',
+                        help='Do write changes back to disk')
     parser.add_argument('--guest-mem', dest='guest_mem', action='store',
-                        help='Guest memory (e.g. 3072M)')
+                        help='Guest memory (e.g. 3072M)', required=True)
     parser.add_argument('--nsockets', dest='nsockets', action='store',
                         help='Number of CPU sockets to simulate')
     parser.add_argument('--qcow2-image', dest='qcow2_image', action='store',
@@ -25,8 +31,11 @@ if __name__ == '__main__':
     parser.add_argument('--interfaces', dest='interfaces',
                         action='store',
                         help='''Comma separated list of interfaces, e.g. '[{"port":"vhost-user-1","queues":2,"mac":"00:00:00:00:00:01"},{"port":"vhost-user-2","queues":1}]' '''  )
+    parser.add_argument('--host-ssh-port', dest='host_ssh_port', 
+                        action='store', help='Host port to forward guest port 22 traffic to (ssh user@localhost -p <host_ssh_port>)')
     args = parser.parse_args()
 
-    guest = QemuVhostuser(args.cpu_list, args.name, args.enable_kvm, args.guest_mem, args.nsockets,
-                          args.cores_per_socket, args.qcow2_image, args.cloud_init_config, args.interfaces)
+    guest = QemuVhostuser(args.cpu_list, args.name, args.enable_kvm, args.snapshot, args.guest_mem, args.nsockets,
+                          args.cores_per_socket, args.qcow2_image, args.cloud_init_config, args.interfaces,
+                          args.host_ssh_port)
     guest.start()

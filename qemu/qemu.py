@@ -16,17 +16,20 @@ def uninstall():
     run(['sudo', 'rm', '-rf', conf.QEMU_DIR])
 
 class QemuVhostuser(object):
-    def __init__(self, cpu_list, name, enable_kvm, guest_mem, nsockets,
-                 cores_per_socket, qcow2_image, cloud_init_iso_image, interfaces):
+    def __init__(self, cpu_list, name, enable_kvm, snapshot, guest_mem, nsockets,
+                 cores_per_socket, qcow2_image, cloud_init_iso_image, interfaces,
+                 host_ssh_port):
         self._cpu_list = cpu_list
         self._name = name
         self._enable_kvm = enable_kvm
+        self._snapshot = snapshot
         self._guest_mem = guest_mem
         self._nsockets = nsockets
         self._cores_per_socket = cores_per_socket
         self._qcow2_image = qcow2_image
         self._cloud_init_iso_image = cloud_init_iso_image
         self._ifaces = json.loads(interfaces)
+        self._host_ssh_port = host_ssh_port
         self._vhostuser_ports_macs = []
         self._pid = -1
         self._pidfile = None
@@ -44,7 +47,12 @@ class QemuVhostuser(object):
             self._pid = f.read().replace('\n', '')
 
     def start(self):
-        cmd = ['sudo','taskset', '-c', self._cpu_list, conf.QEMU_BIN,
+        cmd = ['sudo']
+
+        if self._cpu_list:
+            cmd = cmd + ['taskset', '-c', self._cpu_list]
+        
+        cmd = cmd + [conf.QEMU_BIN,
                '-name', self._name,
                '-cpu', 'host',
                '-m', self._guest_mem,
@@ -52,12 +60,16 @@ class QemuVhostuser(object):
                '-numa', 'node,memdev=mem',
                '-mem-prealloc',
                '-smp', 'sockets=' + str(self._nsockets) + ',cores=' + str(self._cores_per_socket),
+               '-device', 'e1000,netdev=netmgmt',
+               '-netdev', 'user,id=netmgmt,hostfwd=tcp::' + str(self._host_ssh_port) + '-:22',
                '-drive', 'file=' + self._qcow2_image,
                '-drive', 'file=' + self._cloud_init_iso_image,
                '-nographic',
-               '-snapshot',
                '-pidfile', '/tmp/' + self._name + '.pid',
                ]
+
+        if self._snapshot:
+            cmd.append('-snapshot')
 
         if self._enable_kvm:
             cmd.append('-enable-kvm')
