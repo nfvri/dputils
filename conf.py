@@ -6,7 +6,7 @@ BASE_DIR = '/opt/nfvacc'
 # OVS   DPDK
 # 2.6.x	16.07.2
 # 2.7.x	16.11.2
-# 2.10.x 17.11.3
+# 2.10.x	17.11.3
 
 DPDK_VERSION = '16.07.2'
 DPDK_VERSION = '16.11.2'
