@@ -6,11 +6,14 @@ BASE_DIR = '/opt/nfvacc'
 # OVS   DPDK
 # 2.6.x	16.07.2
 # 2.7.x	16.11.2
+# 2.10.x 17.11.3
 
 DPDK_VERSION = '16.07.2'
 DPDK_VERSION = '16.11.2'
+DPDK_VERSION = '17.11.3'
 OVS_VERSION = '2.6.0'
 OVS_VERSION = '2.7.0'
+OVS_VERSION = '2.10.0'
 QEMU_VERSION = '2.7.0'
 
 TARBALLS_DIR = BASE_DIR + '/tarballs/'
