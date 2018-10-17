@@ -1,7 +1,6 @@
 import conf
 from util.system import run
 
-
 class Dpdk(object):
     def install(self):
         run(['sudo','mkdir', '-p', conf.TARBALLS_DIR])
@@ -27,7 +26,12 @@ class Dpdk(object):
         run(['sudo', 'umount', '/dev/hugepages'])
 
     def bind_status(self):
-        run(['sudo', conf.DPDK_DIR + '/tools/dpdk-devbind.py', '--status'])
+        if conf.DPDK_VERSION == '17.11.3':
+            tools_dir = '/usertools/'
+        else:
+            tools_dir = '/tools/'
+
+        run(['sudo', conf.DPDK_DIR + tools_dir + 'dpdk-devbind.py', '--status'])
 
     def bind_igb_uio(self, ifaces):
         """
@@ -36,7 +40,12 @@ class Dpdk(object):
         Args:
             ifaces: list of interfaces to bind, e.g. ['0000:01:00.0', '0000:01:00.1']
         """
-        run(['sudo', conf.DPDK_DIR + '/tools/dpdk-devbind.py', '--bind=igb_uio'] + ifaces)
+        if conf.DPDK_VERSION == '17.11.3':
+            tools_dir = '/usertools/'
+        else:
+            tools_dir = '/tools/'
+
+        run(['sudo', conf.DPDK_DIR + tools_dir + 'dpdk-devbind.py', '--bind=igb_uio'] + ifaces)
 
     def unbind_to(self, ifaces, drv):
         """
@@ -46,5 +55,10 @@ class Dpdk(object):
             ifaces: list of interfaces to unbind, e.g. ['0000:01:00.0', '0000:01:00.1']
             drv: driver to bind interfaces back to, e.g. ixgbe, e1000, etc.
         """
-        run(['sudo', conf.DPDK_DIR + '/tools/dpdk-devbind.py', '--unbind'] + ifaces)
-        run(['sudo', conf.DPDK_DIR + '/tools/dpdk-devbind.py', '--bind=' + drv] + ifaces)
+        if conf.DPDK_VERSION == '17.11.3':
+            tools_dir = '/usertools/'
+        else:
+            tools_dir = '/tools/'
+
+        run(['sudo', conf.DPDK_DIR + tools_dir + 'dpdk-devbind.py', '--unbind'] + ifaces)
+        run(['sudo', conf.DPDK_DIR + tools_dir + 'dpdk-devbind.py', '--bind=' + drv] + ifaces)
