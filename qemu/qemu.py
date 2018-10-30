@@ -6,6 +6,8 @@ import conf
 from util.system import run,kill
 
 
+enable_host_guest_fwd_port = False
+
 def install():
     run(['sudo', '-E', 'wget', '-nc', conf.QEMU_TARBALL_URL, '-P', conf.TARBALLS_DIR])
     run(['sudo', 'tar', '-jxvf', conf.TARBALLS_DIR + conf.QEMU_TARBALL_FILE, '--directory', conf.BASE_DIR])
@@ -18,7 +20,7 @@ def uninstall():
 class QemuVhostuser(object):
     def __init__(self, cpu_list, name, enable_kvm, snapshot, guest_mem, nsockets,
                  cores_per_socket, qcow2_image, cloud_init_iso_image, interfaces,
-                 host_ssh_port):
+                 host_ssh_port, host_guest_fwd_port):
         self._cpu_list = cpu_list
         self._name = name
         self._enable_kvm = enable_kvm
@@ -30,6 +32,10 @@ class QemuVhostuser(object):
         self._cloud_init_iso_image = cloud_init_iso_image
         self._ifaces = json.loads(interfaces)
         self._host_ssh_port = host_ssh_port
+        if host_guest_fwd_port is not None:
+            self._host_guest_fwd_port = json.loads(host_guest_fwd_port)
+        else:
+            self._host_guest_fwd_port = None
         self._vhostuser_ports_macs = []
         self._pid = -1
         self._pidfile = None
@@ -61,7 +67,15 @@ class QemuVhostuser(object):
                '-mem-prealloc',
                '-smp', 'sockets=' + str(self._nsockets) + ',cores=' + str(self._cores_per_socket),
                '-device', 'e1000,netdev=netmgmt',
-               '-netdev', 'user,id=netmgmt,hostfwd=tcp::' + str(self._host_ssh_port) + '-:22',
+               ]
+
+        netdev_string = 'user,id=netmgmt,hostfwd=tcp::' + str(self._host_ssh_port) + '-:22'
+        if self._host_guest_fwd_port is not None:
+            for couple_ports in self._host_guest_fwd_port:
+                netdev_string = netdev_string + ',hostfwd=tcp::' + str(couple_ports["host_port"]) + '-:' + str(couple_ports["guest_port"])
+
+        cmd = cmd + [
+               '-netdev', netdev_string,
                '-drive', 'file=' + self._qcow2_image,
                '-drive', 'file=' + self._cloud_init_iso_image,
                '-nographic',
