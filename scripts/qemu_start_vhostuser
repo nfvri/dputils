@@ -33,9 +33,11 @@ if __name__ == '__main__':
                         help='''Comma separated list of interfaces, e.g. '[{"port":"vhost-user-1","queues":2,"mac":"00:00:00:00:00:01"},{"port":"vhost-user-2","queues":1}]' '''  )
     parser.add_argument('--host-ssh-port', dest='host_ssh_port', 
                         action='store', help='Host port to forward guest port 22 traffic to (ssh user@localhost -p <host_ssh_port>)')
+    parser.add_argument('--host-guest-fwd-port', dest='host_guest_fwd_port',
+                        action='store', help='''Comma separated list of two ports. The first one is the host port to forward guest port, which is the second one, e.g. '[{"host_port":5000,"guest_port":5000}]' ''')
     args = parser.parse_args()
 
     guest = QemuVhostuser(args.cpu_list, args.name, args.enable_kvm, args.snapshot, args.guest_mem, args.nsockets,
                           args.cores_per_socket, args.qcow2_image, args.cloud_init_config, args.interfaces,
-                          args.host_ssh_port)
+                          args.host_ssh_port, args.host_guest_fwd_port)
     guest.start()
