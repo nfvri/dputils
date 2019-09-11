@@ -26,7 +26,7 @@ class Dpdk(object):
         run(['sudo', 'umount', '/dev/hugepages'])
 
     def bind_status(self):
-        if conf.DPDK_VERSION == '17.11.3':
+        if conf.DPDK_VERSION == '17.11.3' or conf.DPDK_VERSION == '18.11.1':
             tools_dir = '/usertools/'
         else:
             tools_dir = '/tools/'
@@ -40,7 +40,7 @@ class Dpdk(object):
         Args:
             ifaces: list of interfaces to bind, e.g. ['0000:01:00.0', '0000:01:00.1']
         """
-        if conf.DPDK_VERSION == '17.11.3':
+        if conf.DPDK_VERSION == '17.11.3' or conf.DPDK_VERSION == '18.11.1':
             tools_dir = '/usertools/'
         else:
             tools_dir = '/tools/'
@@ -55,7 +55,7 @@ class Dpdk(object):
             ifaces: list of interfaces to unbind, e.g. ['0000:01:00.0', '0000:01:00.1']
             drv: driver to bind interfaces back to, e.g. ixgbe, e1000, etc.
         """
-        if conf.DPDK_VERSION == '17.11.3':
+        if conf.DPDK_VERSION == '17.11.3' or conf.DPDK_VERSION == '18.11.1':
             tools_dir = '/usertools/'
         else:
             tools_dir = '/tools/'

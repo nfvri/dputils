@@ -19,7 +19,7 @@ class OvsDpdk(object):
         run(['sudo', 'tar', '-zxvf', conf.TARBALLS_DIR + conf.OVS_TARBALL_FILE, '--directory', conf.BASE_DIR])
         run('cd ' + conf.OVS_DIR +
             ' && sudo ./boot.sh ' +
-            ' && sudo ./configure --with-dpdk=' + conf.DPDK_BUILD +
+            ' && sudo ./configure --with-dpdk=' + conf.DPDK_BUILD + ' --disable-ssl' +
             ' && sudo make', do_shell=True)
 
     def uninstall(self):
@@ -91,7 +91,7 @@ class OvsDpdk(object):
     def dpdk_port_add(self, br, port, pci_addr, rx_queues=None, rx_aff=None, rx_size=None, tx_queues=None, tx_aff=None,
                       tx_size=None):
         cmd = self._vsctl_cmd + ['add-port', br, port, '--', 'set', 'Interface', port, 'type=dpdk']
-        if conf.OVS_VERSION == '2.7.0' or conf.OVS_VERSION == '2.10.0':
+        if conf.OVS_VERSION == '2.7.0' or conf.OVS_VERSION == '2.10.0' or conf.OVS_VERSION == '2.11.0':
             cmd = cmd + ['options:dpdk-devargs=' + pci_addr]
         run(cmd)
         sleep(conf.SLEEP_SECS)

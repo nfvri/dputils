@@ -11,7 +11,7 @@ enable_host_guest_fwd_port = False
 def install():
     run(['sudo', '-E', 'wget', '-nc', conf.QEMU_TARBALL_URL, '-P', conf.TARBALLS_DIR])
     run(['sudo', 'tar', '-jxvf', conf.TARBALLS_DIR + conf.QEMU_TARBALL_FILE, '--directory', conf.BASE_DIR])
-    run('cd ' + conf.QEMU_DIR + ' && sudo ./configure --target-list=x86_64-softmmu --enable-debug --enable-kvm --enable-numa && sudo make',
+    run('cd ' + conf.QEMU_DIR + ' && sudo ./configure --target-list=x86_64-softmmu --enable-debug --enable-virtfs --enable-kvm --enable-numa && sudo make',
         do_shell=True)
 
 def uninstall():
