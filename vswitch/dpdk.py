@@ -6,7 +6,7 @@ class Dpdk(object):
         run(['sudo','mkdir', '-p', conf.TARBALLS_DIR])
         run(['sudo', '-E', 'wget', '-nc', conf.DPDK_TARBALL_URL, '-P', conf.TARBALLS_DIR])
         run(['sudo', 'tar', 'xf', conf.TARBALLS_DIR + conf.DPDK_TARBALL_FILE, '-C', conf.BASE_DIR])
-        run('cd ' + conf.DPDK_DIR + ' && sudo make install T=' + conf.DPDK_TARGET + ' DESTDIR=install', do_shell=True)
+        run('cd ' + conf.DPDK_DIR + ' && sudo make -j install T=' + conf.DPDK_TARGET + ' DESTDIR=install', do_shell=True)
 
     def uninstall(self):
         run(['sudo', 'rm', '-rf', conf.DPDK_DIR])
